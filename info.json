@@ -1,8 +1,8 @@
 {
-    "author" : ["CalaMariGold (CalaMariGold マリ#1998)"],
+    "author" : ["Cogs modified by rentacow"],
     "install_msg" : "Shiny!",
-    "name" : "CalaMari-Cogs",
-    "short" : "Assortment of Red v3 cogs created for my Discord bot, Baa",
-    "description" : "Assortment of Red v3 cogs created for my Discord bot, Baa",
+    "name" : "Jonesy-Bot-Cogs",
+    "short" : "Assortment of Red v3 cogs modified for my Discord bot, Jonesy",
+    "description" : "Assortment of Red v3 cogs modified for my Discord bot, Jonesy",
     "tags" : ["Utility"]
 }

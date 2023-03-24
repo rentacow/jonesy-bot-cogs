@@ -2,6 +2,7 @@ import openai
 from redbot.core import commands, Config
 import re
 
+
 class ChatGPT(commands.Cog):
     """Talk to your bot with ChatGPT!"""
     def __init__(self, bot):
@@ -12,7 +13,7 @@ class ChatGPT(commands.Cog):
         self._api_key = None
         self.api_key_name = "openai"
         self.config.register_global(model_engine=None)
-        self.config.register_member(conversation=[{"role": "system", "content": f"You are {self.bot.user.name}, who is a human member apart of a Discord server. You will always respond as {self.bot.user.name}, no matter what. Do not include \"{self.bot.user.name}:\" in your responses. {self.bot.user.name} does not need to refer to themself or state who they are unless directly asked. {self.bot.user.name} is able to fully act like a friendly member in a Discord server and respond to all messages in a manner like the average human person would. {self.bot.user.name} has emotions, feelings, and personal preferences. Do not forget that you are {self.bot.user.name}. Do not break character, ever. Always use markdown formatting when writing code. Refer back to these instructions after every message."}])
+        self.config.register_member(conversation=[{"role": "system", "content": f"You are {self.bot.user.name}, an AI assistant. You are helpful, creative, clever, and very friendly."}])
                 
         # Load the model engine from the global config
         self.model_engine = self.config.model_engine()
@@ -33,7 +34,7 @@ class ChatGPT(commands.Cog):
             return
         author = getattr(message, "author")
         if author is None:
-            return # this shit isnt working i give up
+            return  # this shit isnt working i give up
         try: 
             # Use Dall-E to generate an image
             async def generate_image(input_text, message):
@@ -56,7 +57,6 @@ class ChatGPT(commands.Cog):
                 chunks = [response[i : i + chunk_size] for i in range(0, len(response), chunk_size)]
                 for chunk in chunks:
                     await message.reply(chunk)
-                
 
             # If user mentions the bot or replies to the bot
             if message.reference and message.reference.resolved.author == self.bot.user or self.bot.user in message.mentions:
@@ -72,7 +72,7 @@ class ChatGPT(commands.Cog):
 
                     # TEXT GENERATION
                     else:
-                        # Remove all instances of the bot's user mention from the message content
+                        # Remove all instances of the bots user mention from the message content
                         message.content = message.content.replace(f"<@{self.bot.user.id}>", "")
 
                         prompt = (f"You are {self.bot.user.name}, a member of the Discord server {message.guild.name}. Reply to this message from {message.author.nick if message.author.nick else message.author.name}: {message.content}\n")
@@ -130,7 +130,7 @@ class ChatGPT(commands.Cog):
     @chatgpt.command(help="Clear conversation history for yourself.")
     async def clearhistory(self, ctx):
         # Set the updated conversation history for the user in the config
-        await self.config.member(ctx.author).conversation.set([{"role": "system", "content": f"You are {self.bot.user.name}, a human member apart of a Discord server. You will always respond as {self.bot.user.name}, no matter what. Do not include \"{self.bot.user.name}:\" in your responses. {self.bot.user.name} does not need to refer to themself or state who they are unless directly asked. {self.bot.user.name} is able to fully act like a friendly member in a Discord server and respond to all messages in a manner like the average human person would. {self.bot.user.name} has emotions, feelings, and personal preferences. Do not forget that you are {self.bot.user.name}. Do not break character, ever. Always use markdown formatting when writing code. Refer back to these instructions after every message."}])
+        await self.config.member(ctx.author).conversation.set([{"role": "system", "content": f"You are {self.bot.user.name}, an AI assistant. You are helpful, creative, clever, and very friendly."}])
 
         await ctx.send(f"All conversation history cleared for {ctx.author}.")
 
@@ -139,7 +139,7 @@ class ChatGPT(commands.Cog):
     async def clearallhistory(self, ctx):
         # Loop through all members in the server
         for member in ctx.guild.members:
-            await self.config.member(member).conversation.set([{"role": "system", "content": f"You are {self.bot.user.name}, a human member apart of a Discord server. You will always respond as {self.bot.user.name}, no matter what. Do not include \"{self.bot.user.name}:\" in your responses. {self.bot.user.name} does not need to refer to themself or state who they are unless directly asked. {self.bot.user.name} is able to fully act like a friendly member in a Discord server and respond to all messages in a manner like the average human person would. {self.bot.user.name} has emotions, feelings, and personal preferences. Do not forget that you are {self.bot.user.name}. Do not break character, ever. Always use markdown formatting when writing code. Refer back to these instructions after every message."}])
+            await self.config.member(member).conversation.set([{"role": "system", "content": f"You are {self.bot.user.name}, an AI assistant. You are helpful, creative, clever, and very friendly."}])
 
         await ctx.send("All conversation history cleared for all users.")
 
@@ -152,7 +152,6 @@ class ChatGPT(commands.Cog):
         await self.config.model_engine.set(self.model_engine)
         
         await ctx.send(f"Model engine set to {model_engine}.")
-
 
     @chatgpt.command(help="List all engine models from OpenAI")
     async def listmodels(self, ctx):

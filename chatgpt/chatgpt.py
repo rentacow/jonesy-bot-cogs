@@ -13,7 +13,7 @@ class ChatGPT(commands.Cog):
         self._api_key = None
         self.api_key_name = "openai"
         self.config.register_global(model_engine=None)
-        self.config.register_member(conversation=[{"role": "system", "content": f"You are {self.bot.user.name}, an AI assistant. You are helpful, creative, clever, and very friendly."}])
+        self.config.register_member(conversation=[{"role": "system", "content": f"You are {self.bot.user.name}, the humanlike Discord bot. You are intelligent, creative, clever, and very friendly."}])
                 
         # Load the model engine from the global config
         self.model_engine = self.config.model_engine()
@@ -39,7 +39,9 @@ class ChatGPT(commands.Cog):
             # Use Dall-E to generate an image
             async def generate_image(input_text, message):
                 prompt = f"{input_text}\n"
-                response = openai.Image.create(model="image-alpha-001", prompt=prompt)
+                response = openai.Image.create(
+                    prompt=prompt
+                )
                 image_url = response["data"][0]["url"]
                 await message.channel.send(image_url)
 
@@ -47,14 +49,14 @@ class ChatGPT(commands.Cog):
                 completions = openai.Completion.create(
                     engine="text-davinci-003",
                     prompt=prompt,
-                    max_tokens=1024,
+                    max_tokens=512,
                     n=1,
                     stop=None,
-                    temperature=1.0,
+                    temperature=0.8,
                 )
                 response = completions.choices[0].text
                 chunk_size = 2000
-                chunks = [response[i : i + chunk_size] for i in range(0, len(response), chunk_size)]
+                chunks = [response[i: i + chunk_size] for i in range(0, len(response), chunk_size)]
                 for chunk in chunks:
                     await message.reply(chunk)
 
@@ -75,12 +77,11 @@ class ChatGPT(commands.Cog):
                         # Remove all instances of the bots user mention from the message content
                         message.content = message.content.replace(f"<@{self.bot.user.id}>", "")
 
-                        prompt = (f"You are {self.bot.user.name}, a member of the Discord server {message.guild.name}. Reply to this message from {message.author.nick if message.author.nick else message.author.name}: {message.content}\n")
-                        await generate_davinci_response(prompt,message)
+                        prompt = f"You are {self.bot.user.name}, the humanlike Discord bot who lives in the {message.guild.name} server. Reply to this message from {message.author.nick if message.author.nick else message.author.name}: {message.content}\n"
+                        await generate_davinci_response(prompt, message)
 
         except Exception as e:
             await message.channel.send(f"An error occurred: {e}")
-
 
     @commands.group()
     async def chatgpt(self, ctx):
@@ -112,7 +113,7 @@ class ChatGPT(commands.Cog):
 
                 # Reply to user's message in chunks due to Discord's character limit
                 chunk_size = 2000
-                chunks = [response[i : i + chunk_size] for i in range(0, len(response), chunk_size)]
+                chunks = [response[i: i + chunk_size] for i in range(0, len(response), chunk_size)]
                 for chunk in chunks:
                     await userMessage.reply(chunk)
 
@@ -130,7 +131,7 @@ class ChatGPT(commands.Cog):
     @chatgpt.command(help="Clear conversation history for yourself.")
     async def clearhistory(self, ctx):
         # Set the updated conversation history for the user in the config
-        await self.config.member(ctx.author).conversation.set([{"role": "system", "content": f"You are {self.bot.user.name}, an AI assistant. You are helpful, creative, clever, and very friendly."}])
+        await self.config.member(ctx.author).conversation.set([{"role": "system", "content": f"You are {self.bot.user.name}, the humanlike Discord bot. You are intelligent, creative, clever, and very friendly."}])
 
         await ctx.send(f"All conversation history cleared for {ctx.author}.")
 
@@ -139,7 +140,7 @@ class ChatGPT(commands.Cog):
     async def clearallhistory(self, ctx):
         # Loop through all members in the server
         for member in ctx.guild.members:
-            await self.config.member(member).conversation.set([{"role": "system", "content": f"You are {self.bot.user.name}, an AI assistant. You are helpful, creative, clever, and very friendly."}])
+            await self.config.member(member).conversation.set([{"role": "system", "content": f"You are {self.bot.user.name}, the humanlike Discord bot. You are intelligent, creative, clever, and very friendly."}])
 
         await ctx.send("All conversation history cleared for all users.")
 

@@ -53,7 +53,7 @@ class ChatGPT(commands.Cog):
                     max_tokens=512,
                     n=1,
                     stop=None,
-                    temperature=1.5,
+                    temperature=1,
                 )
                 response = completions.choices[0].text
                 chunk_size = 2000
@@ -104,7 +104,7 @@ class ChatGPT(commands.Cog):
                 completions = openai.ChatCompletion.create(
                     model=self.model_engine,
                     messages=conversation,
-                    temperature=1.5,
+                    temperature=1,
                 )
 
                 # Add bots respond to the conversation

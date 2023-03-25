@@ -41,7 +41,7 @@ class ChatGPT(commands.Cog):
                 prompt = f"{input_text}\n"
                 response = openai.Image.create(
                     prompt=prompt,
-                    size="768x768",
+                    size="512x512",
                 )
                 image_url = response["data"][0]["url"]
                 await message.channel.send(image_url)

@@ -42,6 +42,7 @@ class ChatGPT(commands.Cog):
                 response = openai.Image.create(
                     prompt=prompt,
                     size="512x512",
+                    # TODO: add user=str(message.author.name),
                 )
                 image_url = response["data"][0]["url"]
                 await message.channel.send(image_url)
@@ -54,6 +55,7 @@ class ChatGPT(commands.Cog):
                     n=1,
                     stop=None,
                     temperature=1,
+                    # TODO: add user=str(message.author.name),
                 )
                 response = completions.choices[0].text
                 chunk_size = 2000
@@ -96,8 +98,8 @@ class ChatGPT(commands.Cog):
         try:
             # Use OpenAI API to generate a text response
             async def generate_response(userMessage, conversation):
-                # Start removing old messages when > 50 messages to save on API tokens
-                while len(conversation) >= 50:
+                # Start removing old messages to stay under token limit
+                while len(conversation) >= 50:  # TODO: shorter, maybe 15
                     del conversation[1]
                     await self.config.member(ctx.author).conversation.set(conversation)
                     
@@ -105,6 +107,7 @@ class ChatGPT(commands.Cog):
                     model=self.model_engine,
                     messages=conversation,
                     temperature=1,
+                    # TODO: add user=str(message.author.name),
                 )
 
                 # Add bots respond to the conversation

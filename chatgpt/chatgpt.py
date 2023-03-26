@@ -42,7 +42,6 @@ class ChatGPT(commands.Cog):
                 response = openai.Image.create(
                     prompt=prompt,
                     size="512x512",
-                    # TODO: add user=str(message.author.name),
                 )
                 image_url = response["data"][0]["url"]
                 await message.channel.send(image_url)
@@ -55,7 +54,6 @@ class ChatGPT(commands.Cog):
                     n=1,
                     stop=None,
                     temperature=1,
-                    # TODO: add user=str(message.author.name),
                 )
                 response = completions.choices[0].text
                 chunk_size = 2000
@@ -107,7 +105,6 @@ class ChatGPT(commands.Cog):
                     model=self.model_engine,
                     messages=conversation,
                     temperature=1,
-                    # TODO: add user=str(message.author.name),
                 )
 
                 # Add bots respond to the conversation

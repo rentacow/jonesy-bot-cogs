@@ -41,7 +41,7 @@ class ChatGPT(commands.Cog):
                 prompt = f"{input_text}\n"
                 response = openai.Image.create(
                     prompt=prompt,
-                    size="512x512",
+                    size="1024x1024",
                 )
                 image_url = response["data"][0]["url"]
                 await message.channel.send(image_url)
@@ -97,7 +97,7 @@ class ChatGPT(commands.Cog):
             # Use OpenAI API to generate a text response
             async def generate_response(userMessage, conversation):
                 # Start removing old messages to stay under token limit
-                while len(conversation) >= 50:  # TODO: shorter, maybe 15
+                while len(conversation) >= 32:  # 50 too long
                     del conversation[1]
                     await self.config.member(ctx.author).conversation.set(conversation)
                     
